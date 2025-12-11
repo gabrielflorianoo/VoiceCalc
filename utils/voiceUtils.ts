@@ -1,7 +1,42 @@
 import { AppMode } from '../types';
 
+const numberMap: Record<string, string> = {
+    'zero': '0', 'um': '1', 'dois': '2', 'três': '3', 'quatro': '4',
+    'cinco': '5', 'seis': '6', 'sete': '7', 'oito': '8', 'nove': '9',
+    'dez': '10', 'cem': '100', 'mil': '1000'
+};
+
+const convertSpokenNumbers = (text: string): string => {
+    let processed = text.toLowerCase();
+
+    // Substituir vírgula e ponto por ponto decimal (importante para floats)
+    processed = processed.replace(/vírgula|ponto/g, '.');
+
+    // Substituir operadores falados por símbolos
+    processed = processed.replace(/mais/g, '+');
+    processed = processed.replace(/menos/g, '-');
+    processed = processed.replace(/vezes|multiplicado por|x/g, '*');
+    processed = processed.replace(/dividido por|sobre/g, '/');
+
+    // Substituir "por cento" por "/100"
+    processed = processed.replace(/por cento/g, '/100');
+
+    // Substituir "e", "negativo" e "positivo"
+    processed = processed.replace(/\be\b/g, ' ');
+    processed = processed.replace(/\bnegativo\b/g, '-');
+    processed = processed.replace(/\bpositivo\b/g, '');
+
+    // Substituir números por extenso
+    for (const word in numberMap) {
+        // Usar regex de palavra completa (\b) para evitar substituições parciais
+        processed = processed.replace(new RegExp(`\\b${word}\\b`, 'g'), numberMap[word]);
+    }
+
+    return processed;
+};
+
 export const parseVoiceMath = (transcript: string): string => {
-    let processed = transcript.toLowerCase();
+    let processed = convertSpokenNumbers(transcript);
 
     // Replace spoken words with operators
     processed = processed.replace(/vezes|multiplicado por|x/g, '*');

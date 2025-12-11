@@ -161,8 +161,22 @@ const App: FC = () => {
             success = true;
         } else if (command.type === 'MATH') {
             try {
+                const mathExpression = command.payload as string;
+
+                const startsWithOperator = /^[+\-*/]/.test(mathExpression.trim());
+                let finalExpression = mathExpression;
+
+                if (startsWithOperator && input !== '0' && input !== 'Error') {
+                    // Se já houver um prevVal e operator esperando, calculamos isso primeiro.
+                    if (prevVal && operator) {
+                        calculate(); // Finaliza a operação pendente
+                    }
+                    // Usa o input atual como primeiro operando
+                    finalExpression = `${input}${mathExpression}`;
+                }
+
                 // eslint-disable-next-line no-new-func
-                const safeMath = new Function('return ' + command.payload);
+                const safeMath = new Function('return ' + finalExpression);
                 const res = safeMath();
                 setInput(res.toString());
                 success = true;
@@ -364,8 +378,8 @@ const App: FC = () => {
                             key={m}
                             onClick={() => setMode(m)}
                             className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${mode === m
-                                    ? 'bg-indigo-600 text-white'
-                                    : 'bg-slate-800 text-slate-400'
+                                ? 'bg-indigo-600 text-white'
+                                : 'bg-slate-800 text-slate-400'
                                 }`}
                         >
                             {m}
