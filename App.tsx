@@ -162,22 +162,24 @@ const App: FC = () => {
         } else if (command.type === 'MATH') {
             try {
                 const mathExpression = command.payload as string;
-
-                const startsWithOperator = /^[+\-*/]/.test(mathExpression.trim());
                 let finalExpression = mathExpression;
 
+                const startsWithOperator = /^[+\-*/]/.test(mathExpression.trim());
+
+                // Verifica se o input atual é um número válido (não '0' ou 'Error')
                 if (startsWithOperator && input !== '0' && input !== 'Error') {
-                    // Se já houver um prevVal e operator esperando, calculamos isso primeiro.
-                    if (prevVal && operator) {
-                        calculate(); // Finaliza a operação pendente
-                    }
-                    // Usa o input atual como primeiro operando
+                    // Prepend o valor atual da calculadora (input) à nova expressão
                     finalExpression = `${input}${mathExpression}`;
                 }
 
                 // eslint-disable-next-line no-new-func
                 const safeMath = new Function('return ' + finalExpression);
                 const res = safeMath();
+
+                // Se houver um cálculo pendente (prevVal/operator), limpar após a nova avaliação.
+                setPrevVal(null);
+                setOperator(null);
+
                 setInput(res.toString());
                 success = true;
             } catch (e) {
