@@ -1,7 +1,0 @@
-{
-  "name": "VoiceCalc Pro",
-  "description": "Calculadora PWA Mobile-First com controle por voz e gestão de histórico de compras.",
-  "requestFramePermissions": [
-    "microphone"
-  ]
-}

@@ -1,0 +1,22 @@
+{
+    "name": "VoiceCalc Pro",
+    "short_name": "VoiceCalc",
+    "description": "Calculadora PWA Mobile-First com controle por voz e gestão de histórico de compras.",
+    "requestFramePermissions": ["microphone"],
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#FFFFFF",
+    "theme_color": "#1C2A3A",
+    "icons": [
+        {
+            "src": "icons/calculator128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/calculator512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
